@@ -28,11 +28,45 @@ namespace ShopCart.Controllers
         {
             return View(await _context.Product.ToListAsync());
         }
-        public async Task<IActionResult> Shop()
+        //public IActionResult List()
+        //{
+        //    var data = _context.Product.ToListAsync();
+        //    return View();
+        //}
+        public async  Task<IActionResult> Shop()
         {
-            var data =await _context.Product.ToListAsync();
+            var data = await _context.Product.ToListAsync();
             return View(data);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public  IActionResult Shop(IFormCollection form)
+        {
+            var fieldName = form["FieldName"].ToString();
+            var keyword = form["Keyword"].ToString();
+
+            IList<Product> products = new List<Product>();
+            switch (fieldName)
+            {
+                case "ID":
+                    var id = int.Parse(keyword);
+                    products = _context.Product.Where(d => d.ProductId.Equals(id)).ToList();
+                    break;
+                case "Name":
+                    products = _context.Product.Where(d => d.ProductName.StartsWith(keyword)).OrderBy(d => d.ProductName).ToList();
+                    break;
+                case "quantity":
+                    var qty = int.Parse(keyword);
+                    products = _context.Product.Where(d => d.Quantity.Equals(qty)).ToList();
+                    break;
+                case "Price":
+                    var price = decimal.Parse(keyword);
+                    products = _context.Product.Where(d => d.Price.Equals(price)).ToList();
+                    break;
+            }
+            return View(products);
+        }
+    
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -83,6 +117,59 @@ namespace ShopCart.Controllers
                 }
             }
             return View(myCart);
+        }
+        public  IActionResult Checkout()
+        {
+            var mycart = GetCart();
+            var amount = mycart.Sum(d => d.Price * d.Qty);
+            var discount = (amount * 20) / 100;
+            var total = amount - discount;
+            Order order = new Order()
+            {
+                OrderAmount = total,
+                OrderDate = DateTime.Now,
+                UserId = User.Identity.Name
+            };
+            _context.Add(order);
+            _context.SaveChanges();
+
+
+            foreach(var item in mycart)
+            {
+                OrderDetail orderDetail = new OrderDetail()
+                {
+                    OrderId = order.OrderId,
+                    Price = item.Price,
+                    ProductId = item.ProductId,
+                    Quantity = item.Qty
+                };
+
+                _context.Add(orderDetail);
+                _context.SaveChanges();
+            }
+
+          
+            HttpContext.Session.Remove("MyCart");
+
+            return View(order);
+        }
+        public IActionResult MyOrders()
+        {
+            var orders = _context.Order.Where(d => d.UserId == User.Identity.Name).ToList();
+            return View(orders);
+        }
+
+        public IActionResult OrderDetails(int id)
+        {
+            // first find the order
+            var order = _context.Order.Find(id);
+
+            // find the order details
+            var orderDetails = _context.OrderDetail.Include(d => d.Product).Where(d => d.OrderId == id).ToList();
+            ViewBag.OrderDetails = orderDetails;
+
+            return View(order);
+
         }
 
         // GET: Products/Details/5

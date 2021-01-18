@@ -4,9 +4,34 @@
     ViewData["Title"] = "Shop";
 }
 
-<h1>Shop</h1>
 
-<table class="table">
+<div class="jumbotron text-lg-center">
+   <h1>Shop</h1>
+   
+</div>
+<div class="card card-body bg-light">
+    <h4>Filter</h4>
+    <form asp-action="Shop" class="form-inline">
+        <div class="form-group">
+            <label class="control-label">Category &nbsp;&nbsp;</label>
+            <select name="FieldName" class="form-control">
+                <option value="ID">ProductId</option>
+                <option value="Name">ProductName</option>
+                <option value="quantity">Quantity</option>
+                <option value="price">Price</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">&nbsp;&nbsp;Product &nbsp;&nbsp; </label>
+            <input type="text" placeholder="Keyword" name="Keyword" id="Keyword" required class="form-control" />
+        </div>
+        <div class="form-group">
+            &nbsp;&nbsp;<input type="submit" value="Go" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+<hr />
+<table class="table table-striped">
     @foreach (var item in Model)
     {
         <tr>
@@ -14,7 +39,7 @@
                 <h4>
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </h4>
-                <img src="~/Images/@item.ImageName" alt="@item.ProductName" width="150" height="150"/>
+                <img src="~/Images/@item.ImageName" alt="@item.ProductName" width="150" height="150" />
             </td>
             <td>
                 <div class="row">
@@ -40,7 +65,7 @@
                             <div class="form-group">
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <input type="submit" class="btn btn-success" value="Add to Cart" />
+                                    <input type="submit" class="btn btn-dark" value="Add to Cart" />
                                     <input type="hidden" name="ProductId" value="@item.ProductId" />
                                 }
                                 else

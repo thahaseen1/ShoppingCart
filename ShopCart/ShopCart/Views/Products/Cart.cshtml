@@ -2,53 +2,82 @@
 
 @{
     ViewData["Title"] = "Cart";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal totalAmount = 0;
+    decimal thisAmount = 0;
+    decimal discountAmount = 0;
+    decimal amount = 0;
 }
 
-<h1>Cart</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Qty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Qty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
+<h1>Cart (@Model.Count())</h1>
+<a><h4 class="badge badge-pill badge-danger">20% off</h4></a>
+@if (Model.Count() == 0)
+{
+    <div class="text-danger text-center" style="font-size:50px;">Cart Empty</div>
+    <p class="text-center">
+        <br />
+        <a href="/Products/Shop">Continue Shopping!</a>
+    </p>
 }
-    </tbody>
-</table>
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Qty)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                thisAmount = (item.Qty * item.Price);
+                totalAmount = totalAmount + thisAmount;
+                discountAmount = ((totalAmount * 20) / 100);
+                amount = (totalAmount - discountAmount);
+                <tr>
+                    <td>
+                        @item.ProductName <br />
+                        <img src="~/Images/@item.ImageName" alt="@item.ProductName" width="150" height="150" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>@thisAmount.ToString("00.00")</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="text-right">Net Amount</td>
+                <td>@totalAmount.ToString("00.00")</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">Discount</td>
+                <td>@discountAmount.ToString("00.00")</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">Total Amount</td>
+                <td>@amount.ToString("00.00")</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="/Products/Checkout" class="btn btn-success">Checkout</a>
+    </div>
+}
+<a href="/Products/Shop" class="alert-info">Continue Shopping!</a>

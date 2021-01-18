@@ -188,5 +188,8 @@ C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Vie
 C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\Edit.cshtml.g.cs
 C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\Index.cshtml.g.cs
 C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\Shop.cshtml.g.cs
-C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\ShopCart.csprojAssemblyReference.cache
 C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\Cart.cshtml.g.cs
+C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\Checkout.cshtml.g.cs
+C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\MyOrders.cshtml.g.cs
+C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\Razor\Views\Products\OrderDetails.cshtml.g.cs
+C:\Users\tshaik\source\repos\ShopCart\ShopCart\obj\Debug\netcoreapp3.1\ShopCart.csprojAssemblyReference.cache
