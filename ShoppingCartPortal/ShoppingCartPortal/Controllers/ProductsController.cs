@@ -31,7 +31,6 @@ namespace ShoppingCartPortal.Controllers
         {
             return View(await _context.Product.ToListAsync());
         }
-        public async Task<IActionResult> 
         public async Task<IActionResult> Shop()
         {
             var products = await _context.Product.OrderBy(d => d.ProductName).ToListAsync();
@@ -43,7 +42,7 @@ namespace ShoppingCartPortal.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddToCart(IFormCollection form)
         {
-            var qty = int.Parse(form["Qty"]);
+            var Quantity = int.Parse(form["Quantity"]);
             var productId = int.Parse(form["ProductId"]);
             var price = decimal.Parse(form["Price"]);
 
@@ -53,7 +52,7 @@ namespace ShoppingCartPortal.Controllers
             {
                 Price = price,
                 ProductId = productId,
-                Qty = qty
+                Quantity = Quantity
             });
 
             var cartString = JsonConvert.SerializeObject(carts);
@@ -93,7 +92,7 @@ namespace ShoppingCartPortal.Controllers
         public IActionResult Checkout()
         {
             var myCart = GetCart();
-            var orderAmount = myCart.Sum(d => (d.Price * d.Qty));
+            var orderAmount = myCart.Sum(d => (d.Price * d.Quantity));
 
             // add the order first
             Order order = new Order()
@@ -113,7 +112,7 @@ namespace ShoppingCartPortal.Controllers
                     OrderId = order.OrderId,
                     Price = item.Price,
                     ProductId = item.ProductId,
-                    Qty = item.Qty
+                    Quantity = item.Quantity
                 };
                 _context.Add(orderDetail);
                 _context.SaveChanges();
@@ -176,7 +175,7 @@ namespace ShoppingCartPortal.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,Qty,Price,ImageName")] Product product, IFormFile ImageName)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,Quantity,Price,ImageName")] Product product, IFormFile ImageName)
         {
             if (ModelState.IsValid)
             {
@@ -220,7 +219,7 @@ namespace ShoppingCartPortal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Qty,Price,ImageName")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Quantity,Price,ImageName")] Product product)
         {
             if (id != product.ProductId)
             {

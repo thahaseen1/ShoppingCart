@@ -14,7 +14,7 @@
                 <h4>
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </h4>
-                <img src="~/Images/@item.ImageName" alt="@item.ProductName" />
+                <img src="~/Images/@item.ImageName" width="250" height="300" alt="@item.ProductName" />
             </td>
             <td>
                 <div class="row">
@@ -22,8 +22,8 @@
                         <form class="" method="post" action="/Products/AddToCart">
                             @Html.AntiForgeryToken()
                             <div class="form-group">
-                                <label>Qty: </label>
-                                <select name="Qty" id="Qty" class="form-control">
+                                <label>Quantity: </label>
+                                <select name="Quantity" id="Quantity" class="form-control">
                                     :
                                     @for (var i = 1; i < 10; i++)
                                     {
